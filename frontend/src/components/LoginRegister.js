@@ -11,7 +11,7 @@ const LoginRegister = () => {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const baseURL = 'http://127.0.0.1:5000';
+    const baseURL = 'https://plantshout-199a76bab95e.herokuapp.com';
 
     if (isLogin) {
       try {

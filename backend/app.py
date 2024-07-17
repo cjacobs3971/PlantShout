@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify, send_from_directory, send_file
-import sqlite3
+import os
+import psycopg2
 import bcrypt
 from werkzeug.utils import secure_filename
-import os
 import openai
 from dotenv import load_dotenv
 import base64
@@ -16,7 +16,10 @@ load_dotenv()
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 CORS(app)
 
-DATABASE = 'plantshout.db'
+DATABASE_URL = os.getenv('DATABASE_URL')
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
 UPLOAD_FOLDER = 'uploads'
 PROFILE_PIC_FOLDER = 'profile_pics'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -33,18 +36,12 @@ client = openai.OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
-def get_db():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
-    return conn
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def get_random_profile_pic():
     profile_pics = [f for f in os.listdir(app.config['PROFILE_PIC_FOLDER']) if allowed_file(f)]
     return random.choice(profile_pics) if profile_pics else None
-
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -62,14 +59,13 @@ def register():
     hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
     profile_pic = get_random_profile_pic()
 
-    conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (?, ?, ?)", (email, hashed_password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s)", (email, hashed_password, profile_pic))
         conn.commit()
-        user_id = cursor.lastrowid
+        user_id = cursor.fetchone()[0]
         return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
-    except sqlite3.IntegrityError:
+    except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
         return jsonify({"message": "An error occurred"}), 500
@@ -80,9 +76,8 @@ def login():
     email = data.get('email')
     password = data.get('password').encode('utf-8')
 
-    conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cursor.fetchone()
 
     if user and bcrypt.checkpw(password, user['password']):
@@ -116,7 +111,6 @@ def get_ai_response(prompt, image_base64=None):
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def posts():
-    conn = get_db()
     cursor = conn.cursor()
     if request.method == 'GET':
         cursor.execute("""
@@ -133,7 +127,7 @@ def posts():
                 SELECT comments.*, users.email AS user_email, users.profile_pic AS user_profile_pic
                 FROM comments
                 JOIN users ON comments.user_id = users.id
-                WHERE comments.post_id = ?
+                WHERE comments.post_id = %s
                 ORDER BY comments.created_at DESC
             """, (post['id'],))
             post['comments'] = [dict(comment) for comment in cursor.fetchall()]
@@ -159,7 +153,7 @@ def posts():
         if category == "question":
             ai_response = get_ai_response(text, image_base64)
 
-        cursor.execute("INSERT INTO posts (title, text, category, tags, image, ai_response, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        cursor.execute("INSERT INTO posts (title, text, category, tags, image, ai_response, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
                        (title, text, category, tags, image_url, ai_response, user_id))
         conn.commit()
         return jsonify({"message": "Post created successfully"}), 201
@@ -170,9 +164,8 @@ def comments():
     text = data.get('text')
     post_id = data.get('post_id')
     user_id = data.get('user_id')
-    conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO comments (text, post_id, user_id) VALUES (?, ?, ?)", (text, post_id, user_id))
+    cursor.execute("INSERT INTO comments (text, post_id, user_id) VALUES (%s, %s, %s)", (text, post_id, user_id))
     conn.commit()
     return jsonify({"message": "Comment added successfully"}), 201
 
@@ -186,4 +179,5 @@ def serve_react_app(path):
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 

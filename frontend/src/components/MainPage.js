@@ -14,7 +14,7 @@ const MainPage = () => {
   const [commentPostId, setCommentPostId] = useState(null);
   const navigate = useNavigate();
 
-  const baseURL = 'http://127.0.0.1:5000';
+  const baseURL = 'https://plantshout-199a76bab95e.herokuapp.com';
 
   useEffect(() => {
     axios.get(`${baseURL}/api/posts`)

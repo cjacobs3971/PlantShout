@@ -1,58 +1,48 @@
-import sqlite3
+import os
+import psycopg2
+from dotenv import load_dotenv
 
-DATABASE = 'plantshout.db'
+load_dotenv()
 
-def create_db():
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-    # Drop tables if they already exist
-    cursor.execute("DROP TABLE IF EXISTS comments")
-    cursor.execute("DROP TABLE IF EXISTS posts")
-    cursor.execute("DROP TABLE IF EXISTS users")
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+cursor = conn.cursor()
 
-    # Create users table
-    cursor.execute('''
-    CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL,
-        profile_pic TEXT
-    )
-    ''')
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    profile_pic TEXT
+)
+''')
 
-    # Create posts table
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        text TEXT NOT NULL,
-        category TEXT NOT NULL,
-        tags TEXT,
-        image TEXT,
-        ai_response TEXT,
-        user_id INTEGER NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-    ''')
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS posts (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    text TEXT NOT NULL,
+    category TEXT,
+    tags TEXT,
+    image TEXT,
+    ai_response TEXT,
+    user_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+''')
 
-    # Create comments table
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS comments (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        text TEXT NOT NULL,
-        post_id INTEGER NOT NULL,
-        user_id INTEGER NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (post_id) REFERENCES posts (id),
-        FOREIGN KEY (user_id) REFERENCES users (id)
-    )
-    ''')
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS comments (
+    id SERIAL PRIMARY KEY,
+    text TEXT NOT NULL,
+    post_id INTEGER REFERENCES posts(id),
+    user_id INTEGER REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+''')
 
-    conn.commit()
-    conn.close()
-    print("Database and tables created successfully")
+conn.commit()
+conn.close()
+print("Database and tables created successfully")
 
-if __name__ == '__main__':
-    create_db()
