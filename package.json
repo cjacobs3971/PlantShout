@@ -8,6 +8,9 @@
     "scripts": {
       "postinstall": "cd frontend && npm install && npm run build",
       "start": "cd backend && flask run"
+    },
+    "dependencies": {
+      "cross-env": "^7.0.3"
     }
   }
   
