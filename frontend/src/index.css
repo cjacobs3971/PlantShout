@@ -1,0 +1,226 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e0ffe0;
+    color: #2e8b57;
+  }
+
+  .main-page {
+    padding: 20px;
+  }
+
+  header {
+    display: flex;
+    flex-direction:column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    background-color: #2e8b57;
+    color: white;
+    padding: 10px 20px;
+    border-bottom: 5px solid #3cb371;
+  }
+
+  .info {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    text-align: center;
+    padding: 10px 20px;
+    border-bottom: 5px solid #3cb371;
+  }
+
+  .post-form {
+    background-color: white;
+    border: 1px solid #3cb371;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  .post-form h2 {
+    color: #3cb371;
+    margin-top: 0;
+  }
+
+  .post-form form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-form form select,
+  .post-form form input,
+  .post-form form textarea,
+  .post-form form button {
+    display: block;
+    width: 99%;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #2e8b57; /* Dark green border */
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  .post-form button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .post-form button:hover {
+    background-color: #45a049;
+  }
+
+  .feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #e0ffe0;
+  }
+
+  .feed form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #2e8b57; /* Dark green border */
+    border-radius: 5px;
+    background-color: #f0fff0; /* Light green background */
+  }
+
+  .feed form textarea {
+    width: 100%
+  }
+
+  .post {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border: 1px solid #3cb371;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .feed button {
+    background-color: #4caf50;
+    color: white;
+
+  }
+
+  .feed button:hover {
+    background-color: #45a049;
+  }
+
+  .feed h2{
+    text-align: center;
+    text-decoration: underline;
+  }
+
+  .feed h3{
+    text-align: center;
+  }
+
+  .post h2 {
+    margin-top: 0;
+  }
+
+  .comments {
+    margin-top: 20px;
+  }
+
+  .comment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #2e8b57; /* Dark green border */
+    border-radius: 5px;
+    background-color: #f0fff0; /* Light green background */
+  }
+
+  .AI_picture img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+  }
+
+  .user_picture img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+  }
+
+  .make-post-button {
+    background-color: #3cb371; /* Medium sea green */
+    color: #ffffff; /* White text */
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .make-post-button:hover {
+    background-color: #2e8b57; /* Dark green */
+  }
+
+  img[alt="AphidAI"] {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .login-register {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #3cb371; /* Medium sea green border */
+    border-radius: 10px;
+    padding: 30px;
+    margin: 10vw;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .login-register h2 {
+    color: #3cb371; /* Medium sea green */
+    text-align: center;
+  }
+
+  .login-register form input, .login-register form button {
+    display: block;
+    width: 100%;
+    margin: 10px 0px;
+    padding: 10px;
+    padding-right: 10px;
+    border: 1px solid #2e8b57; /* Dark green border */
+    border-radius: 5px;
+  }
+
+  .login-register form button {
+    background-color: #3cb371; /* Medium sea green */
+    color: #ffffff; /* White text */
+    cursor: pointer;
+  }
+
+  .login-register form button:hover {
+    background-color: #2e8b57; /* Dark green */
+  }
+
+  .login-register p {
+    text-align: center;
+    color: #2e8b57; /* Dark green */
+    cursor: pointer;
+  }
