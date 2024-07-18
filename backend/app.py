@@ -10,6 +10,7 @@ from PIL import Image
 import io
 from flask_cors import CORS
 import random
+from openai import OpenAI
 
 load_dotenv()
 
@@ -30,7 +31,7 @@ if not os.path.exists(PROFILE_PIC_FOLDER):
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def get_db():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -106,20 +107,20 @@ def resize_image(image_path, max_size=(500, 500)):
 
 def get_ai_response(prompt, image_base64=None):
     messages = [
-        {"role": "system", "content": "you are a helpful assistant."},
+        {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": prompt}
     ]
 
     if image_base64:
         messages.append({"role": "user", "content": f"![image](data:image/png;base64,{image_base64})"})
 
-    response = openai.ChatCompletion.create(
+    response = openai_client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=messages,
         max_tokens=500,
         temperature=0.3
     )
-    return response.choices[0].message.content
+    return response.choices[0].message["content"]
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def posts():
@@ -134,9 +135,9 @@ def posts():
                 ORDER BY posts.created_at DESC
             """)
             posts = cursor.fetchall()
-            posts_list = [dict(post) for post in posts]
-
-            for post in posts_list:
+            posts_list = []
+            for post in posts:
+                post_dict = dict(post)
                 cursor.execute("""
                     SELECT comments.*, users.email AS user_email, users.profile_pic AS user_profile_pic
                     FROM comments
@@ -144,7 +145,8 @@ def posts():
                     WHERE comments.post_id = %s
                     ORDER BY comments.created_at DESC
                 """, (post['id'],))
-                post['comments'] = [dict(comment) for comment in cursor.fetchall()]
+                post_dict['comments'] = [dict(comment) for comment in cursor.fetchall()]
+                posts_list.append(post_dict)
 
             return jsonify(posts_list)
         except Exception as e:
