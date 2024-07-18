@@ -1,16 +1,10 @@
-from flask import Flask, request, jsonify, send_from_directory, send_file, url_for
+from flask import Flask, request, jsonify, send_from_directory, url_for
 import os
 import psycopg2
-#import bcrypt
 from werkzeug.utils import secure_filename
 import openai
 from dotenv import load_dotenv
-import base64
-from PIL import Image
-import io
-from flask_cors import CORS
 import random
-from openai import OpenAI
 
 load_dotenv()
 
@@ -31,7 +25,7 @@ if not os.path.exists(PROFILE_PIC_FOLDER):
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_AI_KEY"))
+openai.api_key = os.getenv("OPENAI_AI_KEY")
 
 def get_db():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -43,7 +37,7 @@ def get_random_profile_pic():
     profile_pics = [f for f in os.listdir(app.config['PROFILE_PIC_FOLDER']) if allowed_file(f)]
     if profile_pics:
         selected_pic = random.choice(profile_pics)
-        return url_for('uploaded_profile_pic', filename=selected_pic, _external=True)
+        return selected_pic
     return None
 
 @app.route('/uploads/<filename>')
@@ -67,7 +61,8 @@ def register():
         cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
-        return jsonify({"message": "User registered successfully", "user_id": user_id, "profile_pic": profile_pic}), 201
+        profile_pic_url = url_for('uploaded_profile_pic', filename=profile_pic, _external=True) if profile_pic else None
+        return jsonify({"message": "User registered successfully", "user_id": user_id, "profile_pic": profile_pic_url}), 201
     except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
@@ -90,9 +85,7 @@ def login():
         user = cursor.fetchone()
 
         if user and user[2] == password:
-            profile_pic_url = None
-            if user[3]:  # Assuming the profile_pic is in the fourth column
-                profile_pic_url = url_for('uploaded_profile_pic', filename=user[3], _external=True)
+            profile_pic_url = url_for('uploaded_profile_pic', filename=user[3], _external=True) if user[3] else None
             return jsonify({"token": "your_jwt_token", "user_id": user[0], "profile_pic": profile_pic_url}), 200
         else:
             return jsonify({"message": "Invalid credentials"}), 401
@@ -119,7 +112,7 @@ def get_ai_response(prompt, image_base64=None):
     if image_base64:
         messages.append({"role": "user", "content": f"![image](data:image/png;base64,{image_base64})"})
 
-    response = openai_client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
         max_tokens=500,
