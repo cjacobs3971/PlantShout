@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, send_file
+from flask import Flask, request, jsonify, send_from_directory, send_file, url_for
 import os
 import psycopg2
 #import bcrypt
@@ -11,8 +11,6 @@ import io
 from flask_cors import CORS
 import random
 from openai import OpenAI
-from flask import url_for
-
 
 load_dotenv()
 
@@ -48,7 +46,6 @@ def get_random_profile_pic():
         return url_for('uploaded_profile_pic', filename=selected_pic, _external=True)
     return None
 
-
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -70,7 +67,7 @@ def register():
         cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
-        return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
+        return jsonify({"message": "User registered successfully", "user_id": user_id, "profile_pic": profile_pic}), 201
     except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
@@ -93,7 +90,10 @@ def login():
         user = cursor.fetchone()
 
         if user and user[2] == password:
-            return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
+            profile_pic_url = None
+            if user[3]:  # Assuming the profile_pic is in the fourth column
+                profile_pic_url = url_for('uploaded_profile_pic', filename=user[3], _external=True)
+            return jsonify({"token": "your_jwt_token", "user_id": user[0], "profile_pic": profile_pic_url}), 200
         else:
             return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:
@@ -102,7 +102,6 @@ def login():
     finally:
         cursor.close()
         conn.close()
-
 
 def resize_image(image_path, max_size=(500, 500)):
     with Image.open(image_path) as img:
@@ -113,7 +112,7 @@ def resize_image(image_path, max_size=(500, 500)):
 
 def get_ai_response(prompt, image_base64=None):
     messages = [
-        {"role": "system", "content": "you are a helpful assistant."},
+        {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": prompt}
     ]
 
@@ -126,7 +125,7 @@ def get_ai_response(prompt, image_base64=None):
         max_tokens=500,
         temperature=0.3
     )
-    return response.choices[0].message.content
+    return response.choices[0].message["content"]
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def posts():
@@ -156,6 +155,8 @@ def posts():
                     "user_email": post[9],
                     "user_profile_pic": post[10],
                 }
+                if post_dict['user_profile_pic']:
+                    post_dict['user_profile_pic'] = url_for('uploaded_profile_pic', filename=post_dict['user_profile_pic'], _external=True)
                 cursor.execute("""
                     SELECT comments.*, users.email AS user_email, users.profile_pic AS user_profile_pic
                     FROM comments
@@ -175,6 +176,9 @@ def posts():
                         "user_profile_pic": comment[6]
                     } for comment in comments
                 ]
+                for comment in post_dict['comments']:
+                    if comment['user_profile_pic']:
+                        comment['user_profile_pic'] = url_for('uploaded_profile_pic', filename=comment['user_profile_pic'], _external=True)
                 posts_list.append(post_dict)
 
             return jsonify(posts_list)
@@ -216,7 +220,6 @@ def posts():
             cursor.close()
             conn.close()
 
-
 @app.route('/api/comments', methods=['POST'])
 def comments():
     data = request.json
@@ -247,4 +250,5 @@ def serve_react_app(path):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
 
