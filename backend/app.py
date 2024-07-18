@@ -43,7 +43,7 @@ def get_random_profile_pic():
     profile_pics = [f for f in os.listdir(app.config['PROFILE_PIC_FOLDER']) if allowed_file(f)]
     if profile_pics:
         selected_pic = random.choice(profile_pics)
-        return url_for('uploaded_profile_pic', filename=selected_pic, _external=True)
+        return selected_pic  # Return the filename directly
     return None
 
 @app.route('/uploads/<filename>')
@@ -250,5 +250,6 @@ def serve_react_app(path):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
 
 
