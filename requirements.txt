@@ -36,6 +36,7 @@ Flask-SQLAlchemy==3.1.1
 Flask-Uploads==0.2.1
 fonttools==4.50.0
 greenlet==3.0.3
+gunicorn==20.1.0
 h11==0.14.0
 help50==3.0.5
 html5lib==1.1
