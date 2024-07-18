@@ -68,7 +68,7 @@ def register():
     except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
-        print(e)
+        print(f"Error during registration: {e}")
         return jsonify({"message": "An error occurred"}), 500
     finally:
         cursor.close()
@@ -91,7 +91,7 @@ def login():
         else:
             return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:
-        print(e)
+        print(f"Error during login: {e}")
         return jsonify({"message": "An error occurred"}), 500
     finally:
         cursor.close()
@@ -148,7 +148,7 @@ def posts():
 
             return jsonify(posts_list)
         except Exception as e:
-            print(e)
+            print(f"Error fetching posts: {e}")
             return jsonify({"message": "An error occurred"}), 500
         finally:
             cursor.close()
@@ -179,7 +179,7 @@ def posts():
             conn.commit()
             return jsonify({"message": "Post created successfully"}), 201
         except Exception as e:
-            print(e)
+            print(f"Error creating post: {e}")
             return jsonify({"message": "An error occurred"}), 500
         finally:
             cursor.close()
@@ -198,7 +198,7 @@ def comments():
         conn.commit()
         return jsonify({"message": "Comment added successfully"}), 201
     except Exception as e:
-        print(e)
+        print(f"Error adding comment: {e}")
         return jsonify({"message": "An error occurred"}), 500
     finally:
         cursor.close()
@@ -215,3 +215,4 @@ def serve_react_app(path):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
