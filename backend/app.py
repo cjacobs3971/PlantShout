@@ -31,7 +31,7 @@ if not os.path.exists(PROFILE_PIC_FOLDER):
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai_client = OpenAI(api_key=os.getenv("OPENAI_AI_KEY"))
 
 def get_db():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
