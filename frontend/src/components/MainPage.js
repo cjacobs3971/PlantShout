@@ -158,7 +158,7 @@ const handleCommentSubmit = async (event, postId) => {
                   </div>
                 ))}
               <div className="comment">
-                <div className="AI_picture">
+                <div clssName = "AI_picture">
                   <img src={AphidAI} alt="AphidAI" />
                 </div>
                 <p>{post.ai_response}</p>
@@ -172,4 +172,3 @@ const handleCommentSubmit = async (event, postId) => {
 };
 
 export default MainPage;
-
