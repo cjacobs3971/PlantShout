@@ -27,11 +27,13 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PROFILE_PIC_FOLDER'] = PROFILE_PIC_FOLDER
 
-if not os.path.exists(PROFILE_PIC_FOLDER):
-    os.makedirs(PROFILE_PIC_FOLDER)
-
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+#if not os.path.exists(PROFILE_PIC_FOLDER):
+#    os.makedirs(PROFILE_PIC_FOLDER)
+#
+#if not os.path.exists(UPLOAD_FOLDER):
+#    os.makedirs(UPLOAD_FOLDER)
+os.makedirs(PROFILE_PIC_FOLDER, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 openai_client = OpenAI(api_key=os.getenv("OPENAI_AI_KEY"))
 
