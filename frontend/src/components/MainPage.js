@@ -58,7 +58,7 @@ const MainPage = () => {
     }
   };
 
-  const handleCommentSubmit = async (event, postId) => {
+const handleCommentSubmit = async (event, postId) => {
     event.preventDefault();
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("user_id");
@@ -68,19 +68,19 @@ const MainPage = () => {
       },
     };
 
-    try {
-      await axios.post(`${baseURL}/api/comments`, {
-        text: commentText,
-        post_id: postId,
-        user_id: userId,
-      }, config);
-      setCommentText("");
-      setCommentPostId(null)
-      axios.get(`${baseURL}/api/posts`).then((response) => setPosts(response.data));
-    } catch(error) {
-      console.error("error adding comment: ", error);
-    }
-  };
+  try {
+    await axios.post(`${baseURL}/api/comments`, {
+      text: commentText,
+      post_id: postId,
+      user_id: userId,
+    }, config);
+    setCommentText("");
+    setCommentPostId(null)
+    axios.get(`${baseURL}/api/posts`).then((response) => setPosts(response.data));
+  } catch(error) {
+    console.error("error adding comment: ", error);
+  }
+};
 
   return (
     <div className="main-page">
@@ -93,8 +93,8 @@ const MainPage = () => {
           where you can get help instantly through the power of AI as well as help
           from other people around the world.</h2>
         <h2>Sometimes we need an immediate response, we get it, just select the question category and fill in the areas.
-          Once you've hit submit post you'll get an instant comment from an AI trying to help.
-          If you don't need an immediate response, don't like the idea of using an AI, or just want
+          Once youve hit submit post youll get an instant comment from an AI trying to help.
+          if you dont need an immediate response, dont like the idea of using an AI, or just want
           to start a discussion with other people then select the discussion category and continue just like last time.</h2>
       </div>
       <div className="post-form">
@@ -137,13 +137,13 @@ const MainPage = () => {
             <h3>{post.text}</h3>
             <form onSubmit={(e) => handleCommentSubmit(e, post.id)}>
               <textarea
-                placeholder="Write a comment here"
-                value={commentPostId === post.id ? commentText : ""}
-                onChange={(e) => {
-                  setCommentPostId(post.id);
-                  setCommentText(e.target.value);
-                }}
-                required
+              placeholder = "Write a comment here"
+              value = {commentPostId === post.id ? commentText : ""}
+              onChange = {(e) => {
+                setCommentPostId(post.id);
+                setCommentText(e.target.value)
+              }}
+              required
               ></textarea>
               <button type="submit">Post Comment</button>
             </form>
@@ -152,13 +152,13 @@ const MainPage = () => {
                 post.comments.map((comment) => (
                   <div key={comment.id} className="comment">
                     <div className="user_picture">
-                      <img src={`https://plantshout-199a76bab95e.herokuapp.com/profile_pics/${comment.user_profile_pic}`} alt="Profile" />
+                    <img src={comment.user_profile_pic} alt="Profile" />
                     </div>
                     <p>{comment.text}</p>
                   </div>
                 ))}
               <div className="comment">
-                <div className="AI_picture">
+                <div clssName = "AI_picture">
                   <img src={AphidAI} alt="AphidAI" />
                 </div>
                 <p>{post.ai_response}</p>
