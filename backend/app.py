@@ -21,8 +21,8 @@ CORS(app)
 
 DATABASE_URL = os.getenv('DATABASE_URL')
 
-UPLOAD_FOLDER = 'uploads'
-PROFILE_PIC_FOLDER = 'profile_pics'
+UPLOAD_FOLDER = 'backend/uploads'
+PROFILE_PIC_FOLDER = 'backend/profile_pics'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PROFILE_PIC_FOLDER'] = PROFILE_PIC_FOLDER
@@ -57,6 +57,10 @@ def uploaded_file(filename):
 @app.route('/profile_pics/<filename>')
 def uploaded_profile_pic(filename):
     return send_from_directory(app.config['PROFILE_PIC_FOLDER'], filename)
+
+@app.route('/profile_pics/<filename>')
+def profile_pics(filename):
+    return send_from_directory(os.path.join(app.root_path, 'profile_pics'), filename)
 
 @app.route('/api/register', methods=['POST'])
 def register():
