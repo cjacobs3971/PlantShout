@@ -153,7 +153,7 @@ const handleCommentSubmit = async (event, postId) => {
                   <div key={comment.id} className="comment">
                     <div className="user_picture">
                     {/*<img src={comment.user_profile_pic} alt="Profile" />*/}
-                    <img src={`https://plantshout-199a76bab95e.herokuapp.com/${comment.user_profile_pic}`} alt="Profile" />
+                    <img src={`${baseURL}/profile_pics/${comment.user_profile_pic}`} alt="Profile" />
                     </div>
                     <p>{comment.text}</p>
                   </div>

@@ -58,9 +58,6 @@ def uploaded_file(filename):
 def uploaded_profile_pic(filename):
     return send_from_directory(app.config['PROFILE_PIC_FOLDER'], filename)
 
-@app.route('/profile_pics/<filename>')
-def profile_pics(filename):
-    return send_from_directory(os.path.join(app.root_path, 'profile_pics'), filename)
 
 @app.route('/api/register', methods=['POST'])
 def register():
