@@ -137,15 +137,38 @@ def posts():
             posts = cursor.fetchall()
             posts_list = []
             for post in posts:
-                post_dict = dict(post)
+                post_dict = {
+                    "id": post[0],
+                    "title": post[1],
+                    "text": post[2],
+                    "category": post[3],
+                    "tags": post[4],
+                    "image": post[5],
+                    "ai_response": post[6],
+                    "user_id": post[7],
+                    "created_at": post[8],
+                    "user_email": post[9],
+                    "user_profile_pic": post[10],
+                }
                 cursor.execute("""
                     SELECT comments.*, users.email AS user_email, users.profile_pic AS user_profile_pic
                     FROM comments
                     JOIN users ON comments.user_id = users.id
                     WHERE comments.post_id = %s
                     ORDER BY comments.created_at DESC
-                """, (post['id'],))
-                post_dict['comments'] = [dict(comment) for comment in cursor.fetchall()]
+                """, (post[0],))
+                comments = cursor.fetchall()
+                post_dict['comments'] = [
+                    {
+                        "id": comment[0],
+                        "text": comment[1],
+                        "post_id": comment[2],
+                        "user_id": comment[3],
+                        "created_at": comment[4],
+                        "user_email": comment[5],
+                        "user_profile_pic": comment[6]
+                    } for comment in comments
+                ]
                 posts_list.append(post_dict)
 
             return jsonify(posts_list)
@@ -186,6 +209,7 @@ def posts():
         finally:
             cursor.close()
             conn.close()
+
 
 @app.route('/api/comments', methods=['POST'])
 def comments():
