@@ -18,8 +18,6 @@ CORS(app)
 
 DATABASE_URL = os.getenv('DATABASE_URL')
 
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-
 UPLOAD_FOLDER = 'uploads'
 PROFILE_PIC_FOLDER = 'profile_pics'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -32,9 +30,10 @@ if not os.path.exists(PROFILE_PIC_FOLDER):
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-client = openai.OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def get_db():
+    return psycopg2.connect(DATABASE_URL, sslmode='require')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -59,16 +58,21 @@ def register():
     hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
     profile_pic = get_random_profile_pic()
 
+    conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s)", (email, hashed_password, profile_pic))
-        conn.commit()
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, hashed_password, profile_pic))
         user_id = cursor.fetchone()[0]
+        conn.commit()
         return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
     except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
+        print(e)
         return jsonify({"message": "An error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -76,14 +80,22 @@ def login():
     email = data.get('email')
     password = data.get('password').encode('utf-8')
 
+    conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-    user = cursor.fetchone()
+    try:
+        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
 
-    if user and bcrypt.checkpw(password, user['password']):
-        return jsonify({"token": "your_jwt_token", "user_id": user['id']}), 200
-    else:
-        return jsonify({"message": "Invalid credentials"}), 401
+        if user and bcrypt.checkpw(password, user[2].encode('utf-8')):
+            return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
+        else:
+            return jsonify({"message": "Invalid credentials"}), 401
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "An error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 def resize_image(image_path, max_size=(500, 500)):
     with Image.open(image_path) as img:
@@ -101,7 +113,7 @@ def get_ai_response(prompt, image_base64=None):
     if image_base64:
         messages.append({"role": "user", "content": f"![image](data:image/png;base64,{image_base64})"})
 
-    response = client.chat.completions.create(
+    response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages,
         max_tokens=500,
@@ -111,28 +123,36 @@ def get_ai_response(prompt, image_base64=None):
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def posts():
+    conn = get_db()
     cursor = conn.cursor()
     if request.method == 'GET':
-        cursor.execute("""
-            SELECT posts.*, users.email AS user_email, users.profile_pic AS user_profile_pic
-            FROM posts
-            JOIN users ON posts.user_id = users.id
-            ORDER BY posts.created_at DESC
-        """)
-        posts = cursor.fetchall()
-        posts_list = [dict(post) for post in posts]
-
-        for post in posts_list:
+        try:
             cursor.execute("""
-                SELECT comments.*, users.email AS user_email, users.profile_pic AS user_profile_pic
-                FROM comments
-                JOIN users ON comments.user_id = users.id
-                WHERE comments.post_id = %s
-                ORDER BY comments.created_at DESC
-            """, (post['id'],))
-            post['comments'] = [dict(comment) for comment in cursor.fetchall()]
+                SELECT posts.*, users.email AS user_email, users.profile_pic AS user_profile_pic
+                FROM posts
+                JOIN users ON posts.user_id = users.id
+                ORDER BY posts.created_at DESC
+            """)
+            posts = cursor.fetchall()
+            posts_list = [dict(post) for post in posts]
 
-        return jsonify(posts_list)
+            for post in posts_list:
+                cursor.execute("""
+                    SELECT comments.*, users.email AS user_email, users.profile_pic AS user_profile_pic
+                    FROM comments
+                    JOIN users ON comments.user_id = users.id
+                    WHERE comments.post_id = %s
+                    ORDER BY comments.created_at DESC
+                """, (post['id'],))
+                post['comments'] = [dict(comment) for comment in cursor.fetchall()]
+
+            return jsonify(posts_list)
+        except Exception as e:
+            print(e)
+            return jsonify({"message": "An error occurred"}), 500
+        finally:
+            cursor.close()
+            conn.close()
     elif request.method == 'POST':
         title = request.form.get('title')
         text = request.form.get('text')
@@ -149,14 +169,21 @@ def posts():
             image_url = f'uploads/{filename}'
             image_base64 = resize_image(image_path)
 
-        ai_response = "Looks like a Human question, ill leave it to you guys!"
+        ai_response = "Looks like a Human question, I'll leave it to you guys!"
         if category == "question":
             ai_response = get_ai_response(text, image_base64)
 
-        cursor.execute("INSERT INTO posts (title, text, category, tags, image, ai_response, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                       (title, text, category, tags, image_url, ai_response, user_id))
-        conn.commit()
-        return jsonify({"message": "Post created successfully"}), 201
+        try:
+            cursor.execute("INSERT INTO posts (title, text, category, tags, image, ai_response, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                           (title, text, category, tags, image_url, ai_response, user_id))
+            conn.commit()
+            return jsonify({"message": "Post created successfully"}), 201
+        except Exception as e:
+            print(e)
+            return jsonify({"message": "An error occurred"}), 500
+        finally:
+            cursor.close()
+            conn.close()
 
 @app.route('/api/comments', methods=['POST'])
 def comments():
@@ -164,10 +191,18 @@ def comments():
     text = data.get('text')
     post_id = data.get('post_id')
     user_id = data.get('user_id')
+    conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO comments (text, post_id, user_id) VALUES (%s, %s, %s)", (text, post_id, user_id))
-    conn.commit()
-    return jsonify({"message": "Comment added successfully"}), 201
+    try:
+        cursor.execute("INSERT INTO comments (text, post_id, user_id) VALUES (%s, %s, %s)", (text, post_id, user_id))
+        conn.commit()
+        return jsonify({"message": "Comment added successfully"}), 201
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "An error occurred"}), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -180,6 +215,3 @@ def serve_react_app(path):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
-
-
-
