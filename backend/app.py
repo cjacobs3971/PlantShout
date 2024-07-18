@@ -11,6 +11,8 @@ import io
 from flask_cors import CORS
 import random
 from openai import OpenAI
+from flask import url_for
+
 
 load_dotenv()
 
@@ -41,7 +43,11 @@ def allowed_file(filename):
 
 def get_random_profile_pic():
     profile_pics = [f for f in os.listdir(app.config['PROFILE_PIC_FOLDER']) if allowed_file(f)]
-    return random.choice(profile_pics) if profile_pics else None
+    if profile_pics:
+        selected_pic = random.choice(profile_pics)
+        return url_for('uploaded_profile_pic', filename=selected_pic, _external=True)
+    return None
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -107,7 +113,7 @@ def resize_image(image_path, max_size=(500, 500)):
 
 def get_ai_response(prompt, image_base64=None):
     messages = [
-        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "system", "content": "you are a helpful assistant."},
         {"role": "user", "content": prompt}
     ]
 
@@ -120,7 +126,7 @@ def get_ai_response(prompt, image_base64=None):
         max_tokens=500,
         temperature=0.3
     )
-    return response.choices[0].message["content"]
+    return response.choices[0].message.content
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def posts():
