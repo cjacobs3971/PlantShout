@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, send_from_directory, send_file
 import os
 import psycopg2
-import bcrypt
+#import bcrypt
 from werkzeug.utils import secure_filename
 import openai
 from dotenv import load_dotenv
@@ -54,14 +54,13 @@ def uploaded_profile_pic(filename):
 def register():
     data = request.json
     email = data.get('email')
-    password = data.get('password').encode('utf-8')
-    hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+    password = data.get('password')
     profile_pic = get_random_profile_pic()
 
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, hashed_password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
         return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
@@ -78,7 +77,7 @@ def register():
 def login():
     data = request.json
     email = data.get('email')
-    password = data.get('password').encode('utf-8')
+    password = data.get('password')
 
     conn = get_db()
     cursor = conn.cursor()
@@ -86,13 +85,8 @@ def login():
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
-        if user:
-            stored_password = user[2]
-            print(f"Stored password hash: {stored_password}")
-            if bcrypt.checkpw(password, stored_password.encode('utf-8')):
-                return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
-            else:
-                return jsonify({"message": "Invalid credentials"}), 401
+        if user and user[2] == password:
+            return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
         else:
             return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:
