@@ -18,7 +18,8 @@ const LoginRegister = () => {
         const response = await axios.post(`${baseURL}/api/login`, { email, password });
         if (response.status === 200) {
           localStorage.setItem('token', response.data.token);
-          localStorage.setItem("user_id", response.data.user_id);
+          localStorage.setItem('user_id', response.data.user_id);
+          console.log('Login successful, redirecting to main page'); // Debugging line
           navigate('/main'); // Navigate to main page on successful login
         } else {
           alert(response.data.message);
@@ -32,11 +33,12 @@ const LoginRegister = () => {
         const response = await axios.post(`${baseURL}/api/register`, { email, password });
         if (response.status === 201) {
           const loginResponse = await axios.post(`${baseURL}/api/login`, { email, password });
-        if (loginResponse.status === 200) {
-          localStorage.setItem('token', loginResponse.data.token);
-          localStorage.setItem('user_id', loginResponse.data.user_id); // Store user_id
-          navigate("/main");
-        } // Switch to login view after successful registration
+          if (loginResponse.status === 200) {
+            localStorage.setItem('token', loginResponse.data.token);
+            localStorage.setItem('user_id', loginResponse.data.user_id); // Store user_id
+            console.log('Registration and login successful, redirecting to main page'); // Debugging line
+            navigate("/main");
+          }
         } else {
           alert(response.data.message);
         }
