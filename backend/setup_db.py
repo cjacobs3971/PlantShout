@@ -9,6 +9,10 @@ DATABASE_URL = os.getenv('DATABASE_URL')
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 cursor = conn.cursor()
 
+cursor.execute("DROP TABLE IF EXISTS comments")
+cursor.execute("DROP TABLE IF EXISTS posts")
+cursor.execute("DROP TABLE IF EXISTS users")
+
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,

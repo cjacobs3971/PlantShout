@@ -22,7 +22,7 @@ CORS(app)
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 UPLOAD_FOLDER = 'backend/uploads'
-PROFILE_PIC_FOLDER = 'backend/profile_pics'
+PROFILE_PIC_FOLDER = 'frontend/public/profile_pics'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PROFILE_PIC_FOLDER'] = PROFILE_PIC_FOLDER
@@ -47,7 +47,7 @@ def get_random_profile_pic():
     profile_pics = [f for f in os.listdir(app.config['PROFILE_PIC_FOLDER']) if allowed_file(f)]
     if profile_pics:
         selected_pic = random.choice(profile_pics)
-        return url_for('uploaded_profile_pic', filename=selected_pic, _external=True)
+        return f'profile_pics/{selected_pic}'
     return None
 
 @app.route('/uploads/<filename>')
