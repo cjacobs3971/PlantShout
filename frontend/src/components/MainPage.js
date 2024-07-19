@@ -152,7 +152,6 @@ const handleCommentSubmit = async (event, postId) => {
                 post.comments.map((comment) => (
                   <div key={comment.id} className="comment">
                     <div className="user_picture">
-                    {/*<img src={comment.user_profile_pic} alt="Profile" />*/}
                     <img src={`${baseURL}/${comment.user_profile_pic}`} alt="Profile" />
                     </div>
                     <p>{comment.text}</p>
@@ -173,3 +172,4 @@ const handleCommentSubmit = async (event, postId) => {
 };
 
 export default MainPage;
+

@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory, send_file
 import os
 import psycopg2
-#import bcrypt
 from werkzeug.utils import secure_filename
 import openai
 from dotenv import load_dotenv
@@ -11,7 +10,6 @@ import io
 from flask_cors import CORS
 import random
 from openai import OpenAI
-from flask import url_for
 
 
 load_dotenv()
@@ -27,11 +25,6 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['PROFILE_PIC_FOLDER'] = PROFILE_PIC_FOLDER
 
-#if not os.path.exists(PROFILE_PIC_FOLDER):
-#    os.makedirs(PROFILE_PIC_FOLDER)
-#
-#if not os.path.exists(UPLOAD_FOLDER):
-#    os.makedirs(UPLOAD_FOLDER)
 os.makedirs(PROFILE_PIC_FOLDER, exist_ok=True)
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -57,7 +50,6 @@ def uploaded_file(filename):
 @app.route('/profile_pics/<filename>')
 def uploaded_profile_pic(filename):
     return send_from_directory(app.config['PROFILE_PIC_FOLDER'], filename)
-
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -104,7 +96,6 @@ def login():
     finally:
         cursor.close()
         conn.close()
-
 
 def resize_image(image_path, max_size=(500, 500)):
     with Image.open(image_path) as img:
@@ -218,7 +209,6 @@ def posts():
             cursor.close()
             conn.close()
 
-
 @app.route('/api/comments', methods=['POST'])
 def comments():
     data = request.json
@@ -249,4 +239,5 @@ def serve_react_app(path):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
 
