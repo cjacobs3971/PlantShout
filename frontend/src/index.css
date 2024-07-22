@@ -224,3 +224,8 @@ body {
     color: #2e8b57; /* Dark green */
     cursor: pointer;
   }
+
+  .login-register h1{
+    text-align: center;
+    color: #2e8b57; /* Dark green */
+  }
