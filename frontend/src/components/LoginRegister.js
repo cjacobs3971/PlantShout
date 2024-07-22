@@ -51,6 +51,13 @@ const LoginRegister = () => {
 
   return (
     <div className="login-register">
+    <div className = "intro_text">
+      <h1>PlantShout</h1>
+      <h2>PlantShout is the dream help website for gardners and plant lovers. 
+        Come here to not just get help from fellow plant lovers or AphidAI about issues your facing in the garden 
+        but you can also provide valuable information for other people facing issues.
+         </h2>
+    </div>
       <form onSubmit={handleSubmit}>
         <h2>{isLogin ? 'Login' : 'Register'}</h2>
         <input type="email" name="email" placeholder="Email" required />
