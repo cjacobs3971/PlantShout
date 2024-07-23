@@ -193,13 +193,13 @@ body {
   }
 
   .login-register {
-    background-color: #ffffff; /* White background */
-    border: 1px solid #3cb371; /* Medium sea green border */
-    border-radius: 10px;
-    padding: 30px;
-    margin: 10vw;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+      background-color: rgba(255, 255, 255, 0.5); /* White background with 50% opacity */
+      border: 1px solid #3cb371; /* Medium sea green border */
+      border-radius: 10px;
+      padding: 30px;
+      margin: 10vw;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
   .login-register h2 {
     color: #3cb371; /* Medium sea green */
