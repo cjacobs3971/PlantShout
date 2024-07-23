@@ -6,6 +6,13 @@ body {
     color: #2e8b57;
   }
 
+  .body-background {
+    background-image: url('/assets/login_background.png'); /* Update this path accordingly */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
   .main-page {
     padding: 20px;
   }
