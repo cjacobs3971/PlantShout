@@ -19,7 +19,8 @@ const LoginRegister = () => {
         if (response.status === 200) {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user_id', response.data.user_id);
-          navigate('/main');
+          console.log('Login successful, redirecting to main page'); // Debugging line
+          navigate('/main'); // Navigate to main page on successful login
         } else {
           alert(response.data.message);
         }
@@ -31,9 +32,13 @@ const LoginRegister = () => {
       try {
         const response = await axios.post(`${baseURL}/api/register`, { email, password });
         if (response.status === 201) {
-          localStorage.setItem('token', response.data.token);
-          localStorage.setItem('user_id', response.data.user_id);
-          navigate('/main');
+          const loginResponse = await axios.post(`${baseURL}/api/login`, { email, password });
+          if (loginResponse.status === 200) {
+            localStorage.setItem('token', loginResponse.data.token);
+            localStorage.setItem('user_id', loginResponse.data.user_id); // Store user_id
+            console.log('Registration and login successful, redirecting to main page'); // Debugging line
+            navigate("/main");
+          }
         } else {
           alert(response.data.message);
         }
@@ -46,13 +51,13 @@ const LoginRegister = () => {
 
   return (
     <div className="login-register">
-      <div className="intro_text">
-        <h1>PlantShout</h1>
-        <h2>PlantShout is the dream help website for gardeners and plant lovers. 
-          Come here to not just get help from fellow plant lovers or AphidAI about issues you're facing in the garden 
-          but you can also provide valuable information for other people facing issues.
-        </h2>
-      </div>
+    <div className = "intro_text">
+      <h1>PlantShout</h1>
+      <h2>PlantShout is the dream help website for gardners and plant lovers. 
+        Come here to not just get help from fellow plant lovers or AphidAI about issues your facing in the garden 
+        but you can also provide valuable information for other people facing issues.
+         </h2>
+    </div>
       <form onSubmit={handleSubmit}>
         <h2>{isLogin ? 'Login' : 'Register'}</h2>
         <input type="email" name="email" placeholder="Email" required />
@@ -68,5 +73,4 @@ const LoginRegister = () => {
 };
 
 export default LoginRegister;
-
 
