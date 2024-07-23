@@ -21,6 +21,7 @@ const LoginRegister = () => {
           localStorage.setItem('user_id', response.data.user_id);
           console.log('Login successful, redirecting to main page'); // Debugging line
           navigate('/main'); // Navigate to main page on successful login
+          console.log('after navigate login'); // Debugging line
         } else {
           alert(response.data.message);
         }
@@ -36,6 +37,7 @@ const LoginRegister = () => {
             localStorage.setItem('user_id', response.data.user_id); // Store user_id
             console.log('Registration and login successful, redirecting to main page'); // Debugging line
             navigate('/main');
+            console.log('after navigate register'); // Debugging line
           
         } else {
           alert(response.data.message);
