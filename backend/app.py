@@ -56,16 +56,14 @@ def register():
     email = data.get('email')
     password = data.get('password')
     profile_pic = get_random_profile_pic()
-    
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, hashed_password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
-        return jsonify({"message": "User registered successfully", "user_id": user_id, "hashed_password": hashed_password}), 201
+        return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
     except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
@@ -87,11 +85,11 @@ def login():
     try:
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
-        checkPW = bcrypt.checkpw(password.encode('utf-8'), bcrypt.gensalt())
-        if user and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
+
+        if user and user[2] == password:
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
         else:
-            return jsonify({"message": "Invalid credentials", "password" : user[2].encode('utf-8') }), 401
+            return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:
         print(f"Error during login: {e}")
         return jsonify({"message": "An error occurred"}), 500
