@@ -32,13 +32,11 @@ const LoginRegister = () => {
       try {
         const response = await axios.post(`${baseURL}/api/register`, { email, password });
         if (response.status === 201) {
-          const loginResponse = await axios.post(`${baseURL}/api/login`, { email, password });
-          if (loginResponse.status === 200) {
-            localStorage.setItem('token', loginResponse.data.token);
-            localStorage.setItem('user_id', loginResponse.data.user_id); // Store user_id
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user_id', response.data.user_id); // Store user_id
             console.log('Registration and login successful, redirecting to main page'); // Debugging line
-            navigate("/main");
-          }
+            navigate('/main');
+          
         } else {
           alert(response.data.message);
         }
