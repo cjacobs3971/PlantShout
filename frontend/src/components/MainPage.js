@@ -3,7 +3,7 @@ import axios from 'axios';
 import AphidAI from '../images/AphidAI.png';
 import { useNavigate } from 'react-router-dom';
 
-const MainPage = () => {
+const MainPage = ({ setIsAuthenticated }) => {
   const [posts, setPosts] = useState([]);
   const [category, setCategory] = useState('');
   const [tags, setTags] = useState('');
@@ -24,6 +24,7 @@ const MainPage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    setIsAuthenticated(false);
     navigate('/login');
   };
 

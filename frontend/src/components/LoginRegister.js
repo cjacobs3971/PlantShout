@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const LoginRegister = () => {
+const LoginRegister = ({ setIsAuthenticated }) => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
 
@@ -24,6 +24,7 @@ const LoginRegister = () => {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user_id', response.data.user_id);
           console.log('Login successful, redirecting to main page'); // Debugging line
+          setIsAuthenticated(true);
           handleMove(); // Navigate to main page on successful login
           console.log('after navigate login'); // Debugging line
         } else {
@@ -40,6 +41,7 @@ const LoginRegister = () => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data.user_id); // Store user_id
             console.log('Registration and login successful, redirecting to main page'); // Debugging line
+            setIsAuthenticated(true);
             handleMove(); // Navigate to main page on successful registration
             console.log('after navigate register'); // Debugging line
           
