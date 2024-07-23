@@ -2,16 +2,14 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e0ffe0;
-    color: #2e8b57;
-  }
-
-  .body-background {
+    /*background-color: #e0ffe0;*/
     background-image: url('./assets/login_background.png'); /* Update this path accordingly */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    color: #2e8b57;
   }
+
 
   .main-page {
     padding: 20px;
