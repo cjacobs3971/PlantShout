@@ -2,10 +2,8 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/login_background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-color: #e0ffe0;
+    /*background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/login_background.png');*/
     color: #2e8b57;
   }
 
