@@ -7,7 +7,7 @@ body {
   }
 
   .body-background {
-    background-image: url('/assets/login_background.png'); /* Update this path accordingly */
+    background-image: url('./assets/login_background.png'); /* Update this path accordingly */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
