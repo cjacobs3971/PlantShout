@@ -3,15 +3,21 @@ body {
     margin: 0;
     padding: 0;
     background-color: #e0ffe0;
-    /*background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/login_background.png');*/
     color: #2e8b57;
+    height: 100%;
+    width: 100%;
   }
 
-  .main-page {
+html, #root {
+    height: 100%;
+    width: 100%;
+}
+  
+.main-page {
     padding: 20px;
   }
 
-  header {
+header {
     display: flex;
     flex-direction:column;
     justify-content: space-between;
@@ -23,7 +29,7 @@ body {
     border-bottom: 5px solid #3cb371;
   }
 
-  .info {
+.info {
     display: flex;
     flex-direction:column;
     align-items: center;
@@ -32,7 +38,7 @@ body {
     border-bottom: 5px solid #3cb371;
   }
 
-  .post-form {
+.post-form {
     background-color: white;
     border: 1px solid #3cb371;
     padding: 20px;
@@ -41,17 +47,17 @@ body {
     margin-bottom: 20px;
   }
 
-  .post-form h2 {
+.post-form h2 {
     color: #3cb371;
     margin-top: 0;
   }
 
-  .post-form form {
+.post-form form {
     display: flex;
     flex-direction: column;
   }
 
-  .post-form form select,
+.post-form form select,
   .post-form form input,
   .post-form form textarea,
   .post-form form button {
@@ -186,21 +192,32 @@ body {
     border-radius: 50%;
   }
 
-  .login-register {
-    background-color: #ffffff; /* White background */
+.login-register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/login_background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.login-register .form-container {
+    background-color: rgba(255, 255, 255, 0.8); /* White background with 80% opacity */
     border: 1px solid #3cb371; /* Medium sea green border */
     border-radius: 10px;
     padding: 30px;
-    margin: 10vw;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .login-register h2 {
+.login-register h2 {
     color: #3cb371; /* Medium sea green */
     text-align: center;
-  }
+}
 
-  .login-register form input, .login-register form button {
+.login-register form input, .login-register form button {
     display: block;
     width: 100%;
     margin: 10px 0px;
@@ -208,25 +225,25 @@ body {
     padding-right: 10px;
     border: 1px solid #2e8b57; /* Dark green border */
     border-radius: 5px;
-  }
+}
 
-  .login-register form button {
+.login-register form button {
     background-color: #3cb371; /* Medium sea green */
     color: #ffffff; /* White text */
     cursor: pointer;
-  }
+}
 
-  .login-register form button:hover {
+.login-register form button:hover {
     background-color: #2e8b57; /* Dark green */
-  }
+}
 
-  .login-register p {
+.login-register p {
     text-align: center;
     color: #2e8b57; /* Dark green */
     cursor: pointer;
-  }
+}
 
-  .login-register h1{
+.login-register h1 {
     text-align: center;
     color: #2e8b57; /* Dark green */
-  }
+}
