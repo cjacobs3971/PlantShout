@@ -7,7 +7,7 @@ const LoginRegister = () => {
   const navigate = useNavigate();
 
   const handleMove = () => {
-    navigate('/main');
+    navigate("/main");
   };
 
   const handleSubmit = async (event) => {
