@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +20,7 @@ const LoginRegister = () => {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user_id', response.data.user_id);
           console.log('Login successful, redirecting to main page'); // Debugging line
-          navigate('/main'); // Navigate to main page on successful login
+          window.location.href = '/main'; // Navigate to main page on successful login
           console.log('after navigate login'); // Debugging line
         } else {
           alert(response.data.message);
@@ -36,7 +36,7 @@ const LoginRegister = () => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data.user_id); // Store user_id
             console.log('Registration and login successful, redirecting to main page'); // Debugging line
-            navigate('/main');
+            window.location.href = '/main';
             console.log('after navigate register'); // Debugging line
           
         } else {
