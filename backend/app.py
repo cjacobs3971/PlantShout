@@ -9,6 +9,11 @@ from openai import OpenAI
 import io
 from PIL import Image
 import base64
+import bcrypt
+import jwt
+import datetime
+from functools import wraps
+
 
 load_dotenv()
 
@@ -41,6 +46,45 @@ def get_random_profile_pic():
         return selected_pic  # Changed to just the filename
     return None
 
+def hash_password(password):
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+def check_password(password, hashed):
+    return bcrypt.checkpw(password.encode('utf-8'), hashed)
+
+def generate_token(user_id):
+    payload = {
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+        'iat': datetime.datetime.utcnow(),
+        'sub': user_id
+    }
+    return jwt.encode(payload, os.getenv('SECRET_KEY'), algorithm='HS256')
+
+def decode_token(token):
+    try:
+        payload = jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=['HS256'])
+        return payload['sub']
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({"message": "Token is missing!"}), 403
+        try:
+            user_id = decode_token(token.split(" ")[1])
+            if not user_id:
+                return jsonify({"message": "Token is invalid!"}), 403
+        except Exception as e:
+            return jsonify({"message": "Token is invalid!"}), 403
+        return f(user_id, *args, **kwargs)
+    return decorated
+
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -54,15 +98,17 @@ def register():
     data = request.json
     email = data.get('email')
     password = data.get('password')
+    hashed_password = hash_password(password)
     profile_pic = get_random_profile_pic()
 
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, hashed_password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
-        return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
+        token = generate_token(user_id)
+        return jsonify({"message": "User registered successfully", "user_id": user_id, "token": token}), 201
     except psycopg2.IntegrityError:
         return jsonify({"message": "Email already exists"}), 409
     except Exception as e:
@@ -71,6 +117,7 @@ def register():
     finally:
         cursor.close()
         conn.close()
+
 
 
 @app.route('/api/login', methods=['POST'])
@@ -85,8 +132,9 @@ def login():
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
-        if user and user[2] == password:
-            return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
+        if user and check_password(password, user[2]):
+            token = generate_token(user[0])
+            return jsonify({"token": token, "user_id": user[0]}), 200
         else:
             return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:
@@ -95,6 +143,7 @@ def login():
     finally:
         cursor.close()
         conn.close()
+
 
 def resize_image(image_path, max_size=(500, 500)):
     with Image.open(image_path) as img:
@@ -121,7 +170,8 @@ def get_ai_response(prompt, image_base64=None):
     return response.choices[0].message.content
 
 @app.route('/api/posts', methods=['GET', 'POST'])
-def posts():
+@token_required
+def posts(user_id):
     conn = get_db()
     cursor = conn.cursor()
     if request.method == 'GET':
@@ -181,7 +231,6 @@ def posts():
         text = request.form.get('text')
         category = request.form.get('category')
         tags = request.form.get('tags')
-        user_id = request.form.get("user_id")
         image = request.files.get('image')
         image_url = None
         image_base64 = None
