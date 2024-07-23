@@ -6,6 +6,10 @@ const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
 
+  const handleMove = () => {
+    navigate('/main');
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const email = event.target.email.value;
@@ -20,7 +24,7 @@ const LoginRegister = () => {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('user_id', response.data.user_id);
           console.log('Login successful, redirecting to main page'); // Debugging line
-          navigate('/main'); // Navigate to main page on successful login
+          handleMove(); // Navigate to main page on successful login
           console.log('after navigate login'); // Debugging line
         } else {
           alert(response.data.message);
@@ -36,7 +40,7 @@ const LoginRegister = () => {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user_id', response.data.user_id); // Store user_id
             console.log('Registration and login successful, redirecting to main page'); // Debugging line
-            navigate('/main');
+            handleMove(); // Navigate to main page on successful registration
             console.log('after navigate register'); // Debugging line
           
         } else {
