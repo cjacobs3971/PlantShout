@@ -13,7 +13,7 @@ const App = () => {
       <Routes>
         <Route path="/login" element={<LoginRegister />} />
         <Route path="/main" element={isAuthenticated() ? <MainPage /> : <Navigate to="/login" />} />
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to={isAuthenticated() ? "/main" : "/login"} />} />
       </Routes>
     </Router>
   );
