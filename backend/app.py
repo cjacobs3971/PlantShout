@@ -91,7 +91,7 @@ def login():
         if user and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
         else:
-            return jsonify({"message": "Invalid credentials"}), 401
+            return jsonify({"message": "Invalid credentials", "password" : user[2].encode('utf-8') }), 401
     except Exception as e:
         print(f"Error during login: {e}")
         return jsonify({"message": "An error occurred"}), 500
