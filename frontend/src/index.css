@@ -60,6 +60,7 @@ header {
 .post-form h2 {
     color: #3cb371;
     margin-top: 0;
+    text-align: center;
   }
 
 .post-form form {
@@ -149,10 +150,12 @@ header {
   .feed h2{
     text-align: center;
     text-decoration: underline;
+    color: white;
   }
 
   .feed h3{
     text-align: center;
+    color: white;
   }
 
   .post h2 {
