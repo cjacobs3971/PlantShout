@@ -257,7 +257,7 @@ header {
     background-color: #2e8b57; /* Dark green */
 }
 
-.login-register p {
+.login-register h3 {
     text-align: center;
     color: #2e8b57; /* Dark green */
     cursor: pointer;

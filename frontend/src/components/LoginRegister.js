@@ -70,9 +70,9 @@ const LoginRegister = ({ setIsAuthenticated }) => {
         <input type="password" name="password" placeholder="Password" required />
         {!isLogin && <input type="password" name="confirmPassword" placeholder="Confirm Password" required />}
         <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
-        <h2 onClick={() => setIsLogin(!isLogin)}>
+        <h3 onClick={() => setIsLogin(!isLogin)}>
           {isLogin ? "Don't have an account? Register" : 'Already have an account? Login'}
-        </h2>
+        </h3>
       </form>
     </div>
   );
