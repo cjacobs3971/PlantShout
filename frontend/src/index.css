@@ -237,7 +237,6 @@ header {
 
 .login-register form input, .login-register form button {
     display: block;
-    width: 100%;
     margin: 10px 0px;
     padding: 10px;
     border: 1px solid #2e8b57; /* Dark green border */
@@ -250,8 +249,7 @@ header {
     cursor: pointer;
     text-align: center;
     display: flex;
-    justify-content: center;
-    width: 100%;    
+    justify-content: center;  
 }
 
 .login-register form button:hover {
