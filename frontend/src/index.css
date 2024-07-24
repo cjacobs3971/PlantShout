@@ -221,16 +221,18 @@ header {
   color: #3cb371; /* Medium sea green */
   text-align: center;
   justify-content: center;
+  margin-left: 15vw;
+  margin-right: 15vw;
 }
 
 .login-register h2 {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(245, 245, 245, 0.8);
   color: #3cb371; /* Medium sea green */
   text-align: center;
-  padding-left: 5vw;
-  padding-right: 5vw;
-  margin-left: 5vw;
-  margin-right: 5vw;
+  padding-left: 2vw;
+  padding-right: 2vw;
+  margin-left: 15vw;
+  margin-right: 15vw;
 }
 
 .login-register form input, .login-register form button {
