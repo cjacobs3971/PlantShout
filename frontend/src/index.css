@@ -217,7 +217,7 @@ header {
 }
 
 .login-register h1 {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.1);
   color: #3cb371; /* Medium sea green */
   text-align: center;
   justify-content: center;
@@ -226,7 +226,7 @@ header {
 }
 
 .login-register h2 {
-  background-color: rgba(245, 245, 245, 0.8);
+  background-color: rgba(245, 245, 245, 0.6);
   color: #3cb371; /* Medium sea green */
   text-align: center;
   padding-left: 2vw;
@@ -241,6 +241,7 @@ header {
     margin: 10px 0px;
     padding: 10px;
     padding-right: 10px;
+    padding-left: 10px; 
     border: 1px solid #2e8b57; /* Dark green border */
     border-radius: 5px;
 }
