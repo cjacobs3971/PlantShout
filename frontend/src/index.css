@@ -217,7 +217,7 @@ header {
 }
 
 .login-register h1 {
-  color: #3cbd4b; /* Medium sea green */
+  color: #35a843; /* Medium sea green */
   text-align: center;
   justify-content: center;
   margin-left: 35vw;
@@ -225,7 +225,7 @@ header {
 }
 
 .login-register h2 {
-  color: #328e3a; /* Medium sea green */
+  color: #35953d; /* Medium sea green */
   text-align: center;
   padding-left: 2vw;
   padding-right: 2vw;
