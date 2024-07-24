@@ -85,6 +85,7 @@ const handleCommentSubmit = async (event, postId) => {
 
   return (
     <div className="main-page">
+      <div className="top_half">
       <header>
         <h1>Welcome to Plant Shout</h1>
         <button onClick={handleLogout}>Logout</button>
@@ -130,6 +131,7 @@ const handleCommentSubmit = async (event, postId) => {
           {/* change this section when chatgpt api endpoint is fixed for images */}
           <button type="submit">Submit Post</button>
         </form>
+      </div>
       </div>
       <div className="feed">
         {posts.map((post) => (

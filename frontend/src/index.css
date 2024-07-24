@@ -14,7 +14,14 @@ html, #root {
 }
   
 .main-page {
-    padding: 20px;
+    /*padding: 20px;*/
+  }
+
+  .top_half{
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/Top_half_backgound.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
 
 header {
@@ -23,7 +30,8 @@ header {
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    background-color: #2e8b57;
+    /*background-color: #2e8b57;*/
+    background-color: rgba(46, 139, 86, 0.5);
     color: white;
     padding: 10px 20px;
     border-bottom: 5px solid #3cb371;
@@ -39,7 +47,8 @@ header {
   }
 
 .post-form {
-    background-color: white;
+    /*background-color: white;*/
+    background-color: rgba(255, 255, 255, 0.8);
     border: 1px solid #3cb371;
     padding: 20px;
     border-radius: 5px;
@@ -89,6 +98,7 @@ header {
     flex-direction: column;
     gap: 20px;
     background-color: #e0ffe0;
+    padding: 20px;
   }
 
   .feed form {
