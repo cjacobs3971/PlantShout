@@ -205,7 +205,7 @@ header {
 }
 
 .login-register form {
-    background-color: rgba(255, 255, 255, 0.5); /* White background with 80% opacity */
+    background-color: rgba(255, 255, 255, 0.2); /* White background with 80% opacity */
     border: 1px solid #3cb371; /* Medium sea green border */
     border-radius: 10px;
     padding: 30px;
@@ -213,15 +213,18 @@ header {
 }
 
 .login-register h1 {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #3cb371; /* Medium sea green */
   text-align: center;
+  justify-content: center;
 }
 
 .login-register h2 {
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.2);
   color: #3cb371; /* Medium sea green */
   text-align: center;
+  padding-left: 2vw;
+  padding-right: 2vw;
 }
 
 .login-register form input, .login-register form button {
@@ -229,6 +232,7 @@ header {
     width: 100%;
     margin: 10px 0px;
     padding: 10px;
+    padding-right: 10px;
     border: 1px solid #2e8b57; /* Dark green border */
     border-radius: 5px;
 }
