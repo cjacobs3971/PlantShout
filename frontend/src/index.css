@@ -139,6 +139,7 @@ header {
     background-size: contain;
     background-position: center;
     background-repeat: repeat-y;
+    background-repeat: repeat-x;
   }
 
   .feed button {
