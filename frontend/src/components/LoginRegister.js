@@ -62,7 +62,8 @@ const LoginRegister = ({ setIsAuthenticated }) => {
       <h2>PlantShout is the dream social website for plant lovers. 
         Come here to get help and to help other people; 
         "Here to grow a community one root at a time" 
-         </h2>
+        </h2>
+      <h2>"Here to grow a community one root at a time"</h2>
     </div>
       <form onSubmit={handleSubmit}>
         <h2>{isLogin ? 'Login' : 'Register'}</h2>
