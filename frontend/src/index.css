@@ -44,6 +44,8 @@ header {
     text-align: center;
     padding: 10px 20px;
     border-bottom: 5px solid #3cb371;
+    background-color: rgba(46, 139, 86, 0.5);
+    color: white;
   }
 
 .post-form {
@@ -97,8 +99,12 @@ header {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: #e0ffe0;
-    padding: 20px;
+    /*background-color: #e0ffe0;*/
+    /*padding: 20px;*/
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
   }
 
   .feed form {
