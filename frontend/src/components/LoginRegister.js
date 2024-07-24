@@ -59,9 +59,9 @@ const LoginRegister = ({ setIsAuthenticated }) => {
     <div className="login-register">
     <div className = "intro_text">
       <h1>PlantShout</h1>
-      <h2>PlantShout is the dream help website for gardners and plant lovers. 
-        Come here to not just get help from fellow plant lovers or AphidAI about issues your facing in the garden 
-        but you can also provide valuable information for other people facing issues.
+      <h2>PlantShout is the dream social website for plant lovers. 
+        Come here to get help and to help other people; 
+        "Here to grow a community one root at a time" 
          </h2>
     </div>
       <form onSubmit={handleSubmit}>
