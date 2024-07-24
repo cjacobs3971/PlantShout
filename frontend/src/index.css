@@ -224,7 +224,7 @@ header {
   justify-content: center;
   margin-left: 35vw;
   margin-right: 35vw;
-  outline-color: rgba(255, 255, 255);
+  text-shadow: 0 0 1px #35953d, 0 0 1px #35953d, 0 0 1px #35953d, 0 0 1px #35953d
 }
 
 .login-register h2 {
