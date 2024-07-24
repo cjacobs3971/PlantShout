@@ -229,6 +229,8 @@ header {
   text-align: center;
   padding-left: 5vw;
   padding-right: 5vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
 }
 
 .login-register form input, .login-register form button {
