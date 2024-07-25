@@ -101,6 +101,10 @@ header {
     gap: 20px;
     background-color: #e0ffe0;
     /*padding: 20px;*/
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
   
   }
 
@@ -136,7 +140,7 @@ header {
     margin-right: 3vw;
     border-radius: 5px;  
     background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background2.png');
-    background-size: stretch;
+    background-size: contain;
     background-position: center;
     background-repeat: repeat-y;
   }
