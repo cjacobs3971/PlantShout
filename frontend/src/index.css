@@ -136,9 +136,9 @@ header {
     margin-right: 3vw;
     border-radius: 5px;  
     background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
-    background-size: stretch;
+    background-size: cover;
     background-position: center;
-    background-repeat: repeat-y;
+    background-repeat: repeat;
   }
 
   .feed button {
