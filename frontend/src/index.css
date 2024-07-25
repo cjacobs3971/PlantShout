@@ -99,12 +99,13 @@ header {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: #e0ffe0;
+    background-color: #f98c6c;
     /*padding: 20px;*/
-    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
+    /*background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
     background-size: contain;
     background-position: center;
     background-repeat: repeat-y;
+    */
   
   }
 
@@ -139,7 +140,7 @@ header {
     margin-left: 3vw;
     margin-right: 3vw;
     border-radius: 5px;  
-    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background2.png');
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background3.png');
     background-size: contain;
     background-position: center;
     background-repeat: repeat-y;
