@@ -135,10 +135,10 @@ header {
     margin-left: 3vw;
     margin-right: 3vw;
     border-radius: 5px;  
-    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
-    background-size: cover;
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background2.png');
+    background-size: stretch;
     background-position: center;
-    background-repeat: repeat;
+    background-repeat: repeat-y;
   }
 
   .feed button {
