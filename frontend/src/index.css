@@ -132,10 +132,10 @@ header {
     /*background-color: white;*/
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.573);
     margin-bottom: 20px;
     margin-top: 20px;
-    border: 1px solid #3cb371;
+    border: 2px solid #3cb371;
     padding: 20px;
     margin-left: 3vw;
     margin-right: 3vw;
@@ -145,7 +145,7 @@ header {
     background-position: center;
     background-repeat: repeat-y;
     */
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.929);
   }
 
   .feed button {
