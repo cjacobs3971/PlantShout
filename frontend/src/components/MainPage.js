@@ -91,13 +91,12 @@ const handleCommentSubmit = async (event, postId) => {
         <button onClick={handleLogout}>Logout</button>
       </header>
       <div className="info">
-        <h2>Home of the plant help, this is an anonymous help page for plant enthusiasts
-          where you can get help instantly through the power of AI as well as help
-          from other people around the world.</h2>
         <h2>Sometimes we need an immediate response, we get it, just select the question category and fill in the areas.
-          Once youve hit submit post youll get an instant comment from an AI trying to help.
-          if you dont need an immediate response, dont like the idea of using an AI, or just want
-          to start a discussion with other people then select the discussion category and continue just like last time.</h2>
+          Once youve hit "submit post" you'll get an instant comment under your post from AphidAI trying to help.
+          </h2>
+        <h2>If you dont need an immediate response, dont like the idea of using an AI, or just want
+          to start a discussion with other people then select the discussion category and continue just like last time.
+          </h2>
       </div>
       <div className="post-form">
         <h2>Create Post</h2>
