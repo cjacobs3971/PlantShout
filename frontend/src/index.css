@@ -161,14 +161,13 @@ header {
   .feed h2{
     text-align: center;
     text-decoration: underline;
-    color: white;
-    border: 1px solid #2e8b57; /* Dark green border */
+    color: rgb(46, 161, 3);
   }
 
   .feed h3{
     text-align: center;
-    color: white;
-    border: 1px solid #2e8b57; /* Dark green border */
+    color: #3cb371
+    
   }
 
   .post h2 {
