@@ -49,10 +49,10 @@ header {
   }
 
   .info h2 {
-    text-shadow: 2px 2px 1px black;
+    text-shadow: 4px 4px 3px black;
   }
   header h1 {
-    text-shadow: 2px 2px 1px black;
+    text-shadow: 4px 4px 3px black;
     padding-top: 2vh;
   }
 
@@ -69,10 +69,10 @@ header {
   }
 
 .post-form h2 {
-    color: #3cb371;
+    color: #ffffff;
     margin-top: 0;
     text-align: center;
-    text-shadow: 2px 2px 1px rgb(0, 0, 0);
+    text-shadow: 4px 4px 3px rgb(0, 0, 0);
   }
 
 .post-form form {
