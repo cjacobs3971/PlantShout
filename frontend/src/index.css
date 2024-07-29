@@ -43,8 +43,8 @@ header {
     align-items: center;
     text-align: center;
     padding: 20px 30px;
-    border-bottom: 5px solid #3cb371;
-    /*background-color: rgba(46, 139, 86, 0.5);*/
+    /*border-bottom: 5px solid #3cb371;
+    background-color: rgba(46, 139, 86, 0.5);*/
     color: white;
   }
 
@@ -53,6 +53,7 @@ header {
   }
   header h1 {
     text-shadow: 2px 2px 1px black;
+    padding-top: 2vh;
   }
 
 .post-form {
@@ -71,6 +72,7 @@ header {
     color: #3cb371;
     margin-top: 0;
     text-align: center;
+    text-shadow: 2px 2px 1px rgb(0, 0, 0);
   }
 
 .post-form form {
