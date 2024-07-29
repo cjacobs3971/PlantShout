@@ -44,12 +44,15 @@ header {
     text-align: center;
     padding: 20px 30px;
     border-bottom: 5px solid #3cb371;
-    background-color: rgba(46, 139, 86, 0.5);
+    /*background-color: rgba(46, 139, 86, 0.5);*/
     color: white;
   }
 
   .info h2 {
-    text-shadow: 1px 1px 0px black;
+    text-shadow: 2px 2px 1px black;
+  }
+  .header h1 {
+    text-shadow: 2px 2px 1px black;
   }
 
 .post-form {
