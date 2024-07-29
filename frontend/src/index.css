@@ -70,11 +70,10 @@ header {
   }
 
 .post-form h2 {
-    color: #ffffff;
+    color: #000000;
     margin-top: 0;
     text-align: center;
-    text-shadow: -3px -3px 4px black;
-    text-shadow: 3px 3px 4px black;
+    text-shadow: 3px 3px 4px rgb(255, 255, 255);
   }
 
 .post-form form {
