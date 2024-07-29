@@ -88,7 +88,6 @@ header {
   .post-form form textarea,
   .post-form form button {
     display: block;
-    width: 100%;
     margin: 10px 0;
     padding: 10px;
     border: 1px solid #2e8b57; /* Dark green border */
