@@ -130,7 +130,6 @@ const handleCommentSubmit = async (event, postId) => {
           {/* change this section when chatgpt api endpoint is fixed for images */}
           <button type="submit">Submit Post</button>
         </form>
-        <li> </li>
         <h2> </h2>
       </div>
       </div>

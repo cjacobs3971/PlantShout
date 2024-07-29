@@ -48,8 +48,8 @@ header {
   }
 
 .post-form {
-    /*background-color: white;*/
-    background-color: rgba(255, 255, 255, 0.8);
+    /*background-color: white;
+    background-color: rgba(255, 255, 255, 0.8);*/
     border: 1px solid #3cb371;
     padding: 20px;
     border-radius: 5px;
@@ -68,6 +68,7 @@ header {
 .post-form form {
     display: flex;
     flex-direction: column;
+    background-color: rgba(255, 255, 255, 0.8);
   }
 
 .post-form form select,
