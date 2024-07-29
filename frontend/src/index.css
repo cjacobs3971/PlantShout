@@ -33,7 +33,7 @@ header {
     text-align: center;
     /*background-color: #2e8b57;
     background-color: rgba(46, 139, 86, 0.5);*/
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 60px 20px;
   }
 
@@ -45,16 +45,15 @@ header {
     padding: 20px 30px;
     /*border-bottom: 5px solid #3cb371;
     background-color: rgba(255, 255, 255, 0.6);*/
-    color: white;
+    color: rgb(0, 0, 0);
   }
 
   .info h2 {
-    text-shadow: -3px -3px 4px black;
-    text-shadow: 3px 3px 4px black;
+
+    text-shadow: 3px 3px 4px rgb(255, 255, 255);
   }
   header h1 {
-    text-shadow: -3px -3px 4px black;
-    text-shadow: 3px 3px 4px black;
+    text-shadow: 3px 3px 4px rgb(255, 255, 255);
     padding-top: 2vh;
   }
 
