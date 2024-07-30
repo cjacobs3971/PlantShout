@@ -42,6 +42,11 @@ def get_random_profile_pic():
         return selected_pic  # Changed to just the filename
     return None
 
+# Serve static files from the React frontend app
+@app.route('/static/<path:path>')
+def serve_static(path):
+    return send_from_directory('../frontend/build/static', path)
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -231,12 +236,16 @@ def comments():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
-    full_path = os.path.join(app.static_folder, path)
-    print(f"Serving path: {full_path}")  # Log the path being served
-    if path != "" and os.path.exists(full_path):
-        return send_file(full_path)
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
     else:
-        return send_file(os.path.join(app.static_folder, 'index.html'))
+        return send_from_directory(app.static_folder, 'index.html')
+
+# Serve React's index.html file for any other routes
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    return send_from_directory('../frontend/build', 'index.html')
 
 
 if __name__ == '__main__':
