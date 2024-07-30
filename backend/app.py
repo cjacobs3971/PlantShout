@@ -13,7 +13,7 @@ import bcrypt
 
 load_dotenv()
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
+app = Flask(__name__, static_folder='static')
 CORS(app)
 
 DATABASE_URL = os.getenv('DATABASE_URL')
@@ -41,12 +41,6 @@ def get_random_profile_pic():
         selected_pic = random.choice(profile_pics)
         return selected_pic  # Changed to just the filename
     return None
-
-# Serve static files
-@app.route('/static/<path:path>')
-def serve_static(path):
-    return send_from_directory(os.path.join(app.static_folder, 'static'), path)
-
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -234,16 +228,18 @@ def comments():
         cursor.close()
         conn.close()
 
-# Catch-all route to serve index.html for React Router
+# Serve static files from the 'static' directory
+@app.route('/static/<path:path>')
+def send_static(path):
+    return send_from_directory('static', path)
+
+# Catch-all route to serve index.html
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
+    return send_from_directory(app.static_folder, 'index.html')
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
