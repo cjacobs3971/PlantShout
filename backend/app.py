@@ -233,7 +233,7 @@ def comments():
 def serve_react_app(path):
     full_path = os.path.join(app.static_folder, path)
     print(f"Serving path: {full_path}")  # Log the path being served
-    if path and os.path.exists(full_path):
+    if path != "" and os.path.exists(full_path):
         return send_file(full_path)
     else:
         return send_file(os.path.join(app.static_folder, 'index.html'))
