@@ -42,6 +42,12 @@ def get_random_profile_pic():
         return selected_pic  # Changed to just the filename
     return None
 
+# Serve static files
+@app.route('/static/<path:path>')
+def serve_static(path):
+    return send_from_directory(os.path.join(app.static_folder, 'static'), path)
+
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
@@ -228,19 +234,16 @@ def comments():
         cursor.close()
         conn.close()
 
+# Catch-all route to serve index.html for React Router
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_react_app(path):
-    full_path = os.path.join(app.static_folder, path)
-    print(f"Serving path: {full_path}")  # Log the path being served
-    if path and os.path.exists(full_path):
-        return send_file(full_path)
+def catch_all(path):
+    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
     else:
-        return send_file(os.path.join(app.static_folder, 'index.html'))
+        return send_from_directory(app.static_folder, 'index.html')
 
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+if __name__ == "__main__":
+    app.run()
 
 
