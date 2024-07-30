@@ -17,10 +17,19 @@ const MainPage = ({ setIsAuthenticated }) => {
   const baseURL = 'https://plantshout-199a76bab95e.herokuapp.com';
 
   useEffect(() => {
-    axios.get(`${baseURL}/api/posts`)
-      .then(response => setPosts(response.data))
-      .catch(error => console.error('Error fetching posts:', error));
+    const fetchPosts = () => {
+      axios.get(`${baseURL}/api/posts`)
+        .then(response => setPosts(response.data))
+        .catch(error => console.error('Error fetching posts:', error));
+    };
+  
+    fetchPosts(); // Initial fetch
+  
+    const interval = setInterval(fetchPosts, 5000); // Fetch new posts every 5 seconds
+  
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
+  
 
   const handleLogout = () => {
     localStorage.removeItem('token');
