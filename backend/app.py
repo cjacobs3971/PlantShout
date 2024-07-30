@@ -13,7 +13,7 @@ import bcrypt
 
 load_dotenv()
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
 CORS(app)
 
 DATABASE_URL = os.getenv('DATABASE_URL')
@@ -228,18 +228,19 @@ def comments():
         cursor.close()
         conn.close()
 
-# Serve static files from the 'static' directory
-@app.route('/static/<path:path>')
-def send_static(path):
-    return send_from_directory('static', path)
-
-# Catch-all route to serve index.html
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def catch_all(path):
-    return send_from_directory(app.static_folder, 'index.html')
+def serve_react_app(path):
+    full_path = os.path.join(app.static_folder, path)
+    print(f"Serving path: {full_path}")  # Log the path being served
+    if path and os.path.exists(full_path):
+        return send_file(full_path)
+    else:
+        return send_file(os.path.join(app.static_folder, 'index.html'))
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
 
 
