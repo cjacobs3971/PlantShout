@@ -231,10 +231,13 @@ def comments():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react_app(path):
-    if path and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_file(os.path.join(app.static_folder, path))
+    full_path = os.path.join(app.static_folder, path)
+    print(f"Serving path: {full_path}")  # Log the path being served
+    if path and os.path.exists(full_path):
+        return send_file(full_path)
     else:
         return send_file(os.path.join(app.static_folder, 'index.html'))
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
