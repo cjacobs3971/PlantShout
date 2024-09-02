@@ -62,12 +62,14 @@ def register():
     password = data.get('password')
     profile_pic = get_random_profile_pic()
 
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    # Generate a salt and hash the password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, hashed_password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", 
+                       (email, hashed_password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
         return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
@@ -79,7 +81,6 @@ def register():
     finally:
         cursor.close()
         conn.close()
-
 
 @app.route('/api/login', methods=['POST'])
 def login():
@@ -110,6 +111,7 @@ def login():
     finally:
         cursor.close()
         conn.close()
+
 
 
 def resize_image(image_path, max_size=(500, 500)):
