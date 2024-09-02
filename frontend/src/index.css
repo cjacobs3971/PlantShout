@@ -18,7 +18,7 @@ html, #root {
   }
 */
   .top_half {
-    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/Top_half_background.png');
+    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/Top_half_background_two.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -119,9 +119,8 @@ header {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /*background-color: #e0ffe0;*/
-    /*padding: 20px;*/
-    background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');
+    background-color: #629b7d;
+    /*background-image: url('https://plantshout-199a76bab95e.herokuapp.com/assets/feed_background.png');*/
     background-size: fill;
     background-position: center;
     background-repeat: repeat-y;
