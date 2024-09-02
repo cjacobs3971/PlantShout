@@ -92,8 +92,10 @@ def login():
     try:
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
+        
+        check_pw = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
+        if user and check_pw == user[2].encode('utf-8'):
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
         else:
             return jsonify({"message": "Invalid credentials"}), 401
