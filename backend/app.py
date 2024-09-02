@@ -55,6 +55,7 @@ def uploaded_file(filename):
 def uploaded_profile_pic(filename):
     return send_from_directory(app.config['PROFILE_PIC_FOLDER'], filename)
 
+
 @app.route('/api/register', methods=['POST'])
 def register():
     data = request.json
@@ -62,14 +63,15 @@ def register():
     password = data.get('password')
     profile_pic = get_random_profile_pic()
 
-    # Generate a salt and hash the password
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    # Explicit salt generation
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", 
-                       (email, hashed_password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic, salt) VALUES (%s, %s, %s, %s) RETURNING id", 
+                       (email, hashed_password, profile_pic, salt.decode('utf-8')))
         user_id = cursor.fetchone()[0]
         conn.commit()
         return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
@@ -91,15 +93,14 @@ def login():
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT password, salt FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
         if user:
-            # Convert the stored hash from the database back to bytes
-            stored_hash = user[2].encode('utf-8')
+            stored_hash = user[0].encode('utf-8')
+            stored_salt = user[1].encode('utf-8')
 
-            # Compare the provided password with the stored hash
-            if bcrypt.checkpw(password.encode('utf-8'), stored_hash):
+            if bcrypt.checkpw(password.encode('utf-8'), bcrypt.hashpw(password.encode('utf-8'), stored_salt)):
                 return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
             else:
                 return jsonify({"message": "Invalid credentials"}), 401
@@ -111,6 +112,7 @@ def login():
     finally:
         cursor.close()
         conn.close()
+
 
 
 
