@@ -98,10 +98,10 @@ def login():
         if user and check_pw == user[2].encode('utf-8'):
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
         else:
-            return jsonify({"message": "Invalid credentials", "user": user, "password": check_pw, "user2": user[2].encode('utf-8')}), 401
+            return jsonify({"message": "Invalid credentials"}), user, check_pw, user[2].encode('utf-8'), 401
     except Exception as e:
         print(f"Error during login: {e}")
-        return jsonify({"message": "An error occurred", "user": user, "password": check_pw, "user2": user[2].encode('utf-8')}), 500
+        return jsonify({"message": "An error occurred"}), 500
     finally:
         cursor.close()
         conn.close()
