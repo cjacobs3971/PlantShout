@@ -62,7 +62,8 @@ def register():
     password = data.get('password')
     profile_pic = get_random_profile_pic()
 
-    ##hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    print(hashed_password)
 
     conn = get_db()
     cursor = conn.cursor()
@@ -92,6 +93,8 @@ def login():
     try:
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
+        bpasword= bcrypt.checkpw(password.encode('utf-8'))
+        print(bpasword)
 
         if user and user[2] == password:
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
