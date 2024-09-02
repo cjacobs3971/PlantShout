@@ -62,10 +62,12 @@ def register():
     password = data.get('password')
     profile_pic = get_random_profile_pic()
 
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, password, profile_pic))
+        cursor.execute("INSERT INTO users (email, password, profile_pic) VALUES (%s, %s, %s) RETURNING id", (email, hashed_password, profile_pic))
         user_id = cursor.fetchone()[0]
         conn.commit()
         return jsonify({"message": "User registered successfully", "user_id": user_id}), 201
@@ -91,7 +93,7 @@ def login():
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
 
-        if user and user[2] == password:
+        if user and bcrypt.checkpw(password.encode('utf-8'), user[2].encode('utf-8')):
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
         else:
             return jsonify({"message": "Invalid credentials"}), 401
