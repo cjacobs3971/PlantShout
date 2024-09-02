@@ -92,14 +92,16 @@ def login():
     try:
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
-        
-        print(user)
-        checkpw = bcrypt.checkpw(password.encode('utf-8'))
-        print(checkpw)
-        print(user[2])
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user[2]):
-            return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
+        if user:
+            # Convert the stored hash from the database back to bytes
+            stored_hash = user[2].encode('utf-8')
+
+            # Compare the provided password with the stored hash
+            if bcrypt.checkpw(password.encode('utf-8'), stored_hash):
+                return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
+            else:
+                return jsonify({"message": "Invalid credentials"}), 401
         else:
             return jsonify({"message": "Invalid credentials"}), 401
     except Exception as e:
@@ -108,6 +110,7 @@ def login():
     finally:
         cursor.close()
         conn.close()
+
 
 def resize_image(image_path, max_size=(500, 500)):
     with Image.open(image_path) as img:
