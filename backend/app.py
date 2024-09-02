@@ -101,7 +101,7 @@ def login():
             return jsonify({"message": "Invalid credentials", "user": user, "password": check_pw, "user2": user[2].encode('utf-8')}), 401
     except Exception as e:
         print(f"Error during login: {e}")
-        return jsonify({"message": "An error occurred"}), 500
+        return jsonify({"message": "An error occurred", "user": user, "password": check_pw, "user2": user[2].encode('utf-8')}), 500
     finally:
         cursor.close()
         conn.close()
