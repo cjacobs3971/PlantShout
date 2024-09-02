@@ -92,6 +92,11 @@ def login():
     try:
         cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cursor.fetchone()
+        
+        print(user)
+        checkpw = bcrypt.checkpw(password.encode('utf-8'))
+        print(checkpw)
+        print(user[2])
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user[2]):
             return jsonify({"token": "your_jwt_token", "user_id": user[0]}), 200
